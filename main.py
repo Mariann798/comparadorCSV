@@ -21,7 +21,9 @@ def compare_files(path1:str, path2:str, column):
     df2 = read_csv(path2, column)
     print("Len File 2: ", len(df2))
     
-    data_in_df1_not_in_df2 = set(df1[column]) - set(df2[column])
+    # Bolt ⚡: Use .unique() before converting to a set to improve performance.
+    # This is faster because it reduces the number of elements to be hashed.
+    data_in_df1_not_in_df2 = set(df1[column].unique()) - set(df2[column].unique())
     return list(data_in_df1_not_in_df2)
 
 if __name__ == '__main__':
