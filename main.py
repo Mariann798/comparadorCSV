@@ -13,7 +13,9 @@ parser.add_argument("-c", "--column", help="", required=True)
 parser = parser.parse_args()
 
 def read_csv(path:str, column:str) -> pandas.DataFrame:
-    return pandas.read_csv(path, sep=";", usecols=[column])
+    # Specifying dtype=str prevents pandas from inferring the data type,
+    # which provides a significant speed boost when reading large CSV files.
+    return pandas.read_csv(path, sep=";", usecols=[column], dtype=str)
 
 def compare_files(path1:str, path2:str, column):
     df1 = read_csv(path1, column)
