@@ -13,7 +13,10 @@ parser.add_argument("-c", "--column", help="", required=True)
 parser = parser.parse_args()
 
 def read_csv(path:str, column:str) -> pandas.DataFrame:
-    return pandas.read_csv(path, sep=";", usecols=[column])
+    # Set dtype=str to bypass type inference, which can be a bottleneck.
+    # For a simple comparison script, treating all data as strings is safe
+    # and significantly faster, as pandas doesn't need to guess data types.
+    return pandas.read_csv(path, sep=";", usecols=[column], dtype=str)
 
 def compare_files(path1:str, path2:str, column):
     df1 = read_csv(path1, column)
