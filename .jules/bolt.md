@@ -1,0 +1,3 @@
+## 2024-07-24 - Memory Optimization with Pandas Chunking
+**Learning:** For large CSV files, reading the entire file into memory at once is a significant performance bottleneck and can lead to memory errors. Processing files in chunks using `pandas.read_csv` with the `chunksize` parameter is a highly effective way to reduce peak memory usage.
+**Action:** When processing large files, default to a chunking strategy to ensure the application remains scalable and avoids memory-related failures.
