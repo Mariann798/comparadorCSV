@@ -22,10 +22,14 @@ def compare_files(path1:str, path2:str, column):
     df2 = read_csv(path2, column)
     print("Len File 2: ", len(df2))
     
-    # Using .unique() is more memory-efficient and faster than converting the
-    # entire Series to a set, especially when there are many duplicate values.
-    # It de-duplicates the data first in a highly optimized way.
-    data_in_df1_not_in_df2 = set(df1[column].unique()) - set(df2[column].unique())
+    # Using the pandas `isin()` method with a pre-computed set of unique values
+    # from the second dataframe is significantly more performant than converting
+    # both series to sets and calculating the difference. `isin()` is a highly
+    # optimized, Cython-based routine that avoids the overhead of a full set
+    # conversion on the first dataframe, especially for large datasets.
+    unique_df2 = set(df2[column].unique())
+    mask = ~df1[column].isin(unique_df2)
+    data_in_df1_not_in_df2 = df1[column][mask].unique()
     return list(data_in_df1_not_in_df2)
 
 if __name__ == '__main__':
