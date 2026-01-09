@@ -22,11 +22,15 @@ def compare_files(path1:str, path2:str, column):
     df2 = read_csv(path2, column)
     print("Len File 2: ", len(df2))
     
-    # Using .unique() is more memory-efficient and faster than converting the
-    # entire Series to a set, especially when there are many duplicate values.
-    # It de-duplicates the data first in a highly optimized way.
-    data_in_df1_not_in_df2 = set(df1[column].unique()) - set(df2[column].unique())
-    return list(data_in_df1_not_in_df2)
+    # For optimal performance, we use pandas' vectorized `isin` method, which is
+    # significantly faster than converting to sets for finding differences.
+    # The `~` operator inverts the boolean mask, selecting only the elements
+    # from the first DataFrame that are not present in the second.
+    # Using `unique()` on the second series provides a smaller set of values
+    # for `isin` to check against, which speeds up the operation.
+    df2_uniques = df2[column].unique()
+    data_in_df1_not_in_df2 = df1[column][~df1[column].isin(df2_uniques)]
+    return data_in_df1_not_in_df2.unique().tolist()
 
 if __name__ == '__main__':
     args = parser.parse_args()
