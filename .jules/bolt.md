@@ -1,0 +1,3 @@
+## 2024-09-05 - Pandas Set vs. isin()
+**Learning:** Using `set(series1.unique()) - set(series2.unique())` is significantly less performant than using the vectorized `series1[~series1.isin(series2.unique())]` method in pandas. The former involves costly conversions to Python sets, while the latter leverages pandas' highly optimized, low-level operations.
+**Action:** For finding differences between pandas Series, always prefer the native `.isin()` method over set-based operations.
