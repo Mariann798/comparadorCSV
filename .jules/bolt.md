@@ -1,0 +1,3 @@
+## 2024-05-20 - Pandas Set Conversion Bottleneck
+**Learning:** Converting pandas Series to sets for difference operations (`set(series1) - set(series2)`) is a significant performance anti-pattern. The conversion process is slow, especially for large datasets, as it pulls data out of pandas' optimized internal memory structures and into Python's generic set object.
+**Action:** Prioritize using built-in, vectorized pandas operations like `.isin()` for set-like comparisons. This keeps the computation within the highly optimized pandas/NumPy environment, avoiding the costly overhead of Python object conversion.
