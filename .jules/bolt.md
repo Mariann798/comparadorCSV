@@ -1,0 +1,3 @@
+## 2024-07-25 - Pandas Set Difference Performance
+**Learning:** For finding elements in one pandas Series that are not in another, using `Series[~Series.isin(other_series_uniques)]` is significantly more performant than the more pythonic `set(series1.unique()) - set(series2.unique())`. The former leverages pandas' highly optimized, vectorized operations, while the latter incurs a significant performance penalty due to the overhead of converting the underlying NumPy arrays to Python sets.
+**Action:** In future optimizations, always prefer vectorized pandas operations like `.isin()` over solutions that require converting pandas objects to standard Python collections for processing.
