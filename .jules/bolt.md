@@ -1,0 +1,5 @@
+## 2024-07-25 - Pandas `isin` vs Set Conversion
+
+**Learning:** For finding elements in one pandas Series that are not in another, using `Series[~Series.isin(other_series_uniques)]` is significantly more performant than converting the Series to sets and then finding the difference (e.g., `set(series1.unique()) - set(series2.unique())`). The `isin` method leverages pandas' highly optimized, vectorized operations, which avoids the costly overhead of converting the underlying data to Python `set` objects. This performance gap widens considerably with larger datasets.
+
+**Action:** When performing set-like comparisons (e.g., finding differences, intersections) between pandas Series, always default to using built-in vectorized methods like `.isin()` instead of converting to standard Python data structures. This ensures the operation is executed efficiently within the pandas C/Cython-optimized backend.
